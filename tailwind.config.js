@@ -14,7 +14,10 @@ export default {
             },
             colors: {
                 "main-bg": "#FFFF",
+                "dark-main-bg": "#252525",
                 "secondary-bg": "#F14A00",
+                "tertiary-bg": "#e8e8e8",
+                "dark-tertiary-bg": "#1c1c1c",
                 "main-border": "#F14A00",
                 "main-text": "#3C3D37",
                 "dark-main-text": "#FBFBFB",
