@@ -24,9 +24,9 @@
                         <i class="fa-solid fa-circle-user text-2xl"></i>
                         <span class="font-semibold">
                             @if (Auth::check())
-                            {{ Auth::user()->name }}
+                                {{ Auth::user()->name }}
                             @else
-                            User
+                                User
                             @endif
                         </span>
                     </div>
