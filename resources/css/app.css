@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --tooltip-bg: #252525; /* Light mode tooltip background */
+    --tooltip-arrow-color: #252525; /* Light mode arrow color */
+}
+
+.dark {
+    --tooltip-bg: #f2f2f2; /* Dark mode tooltip background */
+    --tooltip-arrow-color: #f2f2f2; /* Dark mode arrow color */
+}
+
+/* Tooltip styling */
+.group span {
+    background-color: var(--tooltip-bg);
+    color: white; /* Text color for light mode */
+}
+
+.dark .group span {
+    color: #252525; /* Text color for dark mode */
+}
+
+/* Arrow styling */
+.group span::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent var(--tooltip-arrow-color) transparent transparent;
+}
