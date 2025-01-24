@@ -138,6 +138,9 @@
                                 </h3>
                             </div>
                         </div>
+                        <button class="w-full p-2 bg-secondary-bg rounded-md text-sm mt-2 text-dark-main-text">
+                            Process
+                        </button>
                     </div>
                 </div>
             </div>
