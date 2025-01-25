@@ -7,7 +7,7 @@ Route::get('/dashboard', function () {
 })->name('dashboard.index');
 
 Route::get('/products', function () {
-    return view('content.transactions');
+    return view('content.products');
 })->name('products.index');
 
 Route::get('/transactions', function () {
