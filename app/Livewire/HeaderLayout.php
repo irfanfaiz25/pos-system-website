@@ -29,6 +29,6 @@ class HeaderLayout extends Component
 
     public function render()
     {
-        return view('livewire.header-layout');
+        return view('livewire.components.header-layout');
     }
 }
