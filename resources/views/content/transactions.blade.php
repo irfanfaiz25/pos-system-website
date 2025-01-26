@@ -13,9 +13,9 @@
                     <div
                         class="min-w-48 p-2 flex items-center space-x-2 bg-main-bg dark:bg-dark-main-bg dark:border-2 border-[#393939]
                         hover:bg-gray-100 rounded-lg shadow-lg cursor-pointer">
-                        {{-- <img src="{{ asset('storage/img/category2.jpg') }}" alt="category1"
-                            class="w-11 h-11 object-cover rounded-lg"> --}}
-                        <div class="w-11 h-11 bg-gray-300 rounded-md"></div>
+                        <img src="{{ asset('storage/img/category2.png') }}" alt="category1"
+                            class="w-11 h-11 object-cover rounded-md">
+                        {{-- <div class="w-11 h-11 bg-gray-300 rounded-md"></div> --}}
                         <h3 class="text-sm font-semibold text-main-text dark:text-dark-main-text">
                             Burger
                         </h3>
@@ -28,7 +28,7 @@
                 <h1 class="text-xl font-bold text-main-text dark:text-dark-main-text mb-4 mt-5">
                     Menu
                 </h1>
-                <div class="w-full max-w-sm min-w-[200px]">
+                <div class="max-w-sm min-w-[150px]">
                     <div class="relative">
                         <input
                             class="w-full bg-main-bg dark:bg-dark-main-bg placeholder:text-slate-400 text-main-text text-sm border border-gray-200 dark:border-[#393939] rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-main-border/80 dark:focus:border-main-border/80 hover:border-gray-300 shadow-sm focus:shadow"
@@ -47,9 +47,9 @@
             <div class="grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
                 @for ($i = 0; $i < 6; $i++)
                     <div class="p-3 bg-main-bg dark:bg-dark-main-bg dark:border-2 border-[#393939] rounded-lg shadow-lg">
-                        {{-- <img src="{{ asset('storage/img/product2.jpg') }}" alt="product"
-                            class="w-full h-32 object-cover rounded-lg mb-4"> --}}
-                        <div class="w-full h-32 rounded-lg mb-4 bg-gray-300"></div>
+                        <img src="{{ asset('storage/img/product2.jpg') }}" alt="product"
+                            class="w-full h-32 object-cover rounded-lg mb-4">
+                        {{-- <div class="w-full h-32 rounded-lg mb-4 bg-gray-300"></div> --}}
                         <h3 class="text-base">Vegetable Burger Vegetable</h3>
                         <div class="flex justify-between items-center mb-3">
                             <h2 class="font-bold text-lg text-tertiary-text">IDR 19,000</h2>
@@ -95,11 +95,13 @@
                     <div class="space-y-2 overflow-y-auto h-[92%]">
                         @for ($i = 0; $i < 3; $i++)
                             <div class="flex space-x-2 p-2 border-2 border-gray-200/80 dark:border-[#3c3c3c] rounded-lg">
-                                {{-- <img src="{{ asset('storage/img/product2.jpg') }}" alt="product"
-                                    class="w-20 h-20 object-cover rounded-lg"> --}}
                                 <div class="w-[25%]">
-                                    <div class="w-20 h-20 rounded-lg bg-gray-300"></div>
+                                    <img src="{{ asset('storage/img/product2.jpg') }}" alt="product"
+                                        class="w-20 h-20 object-cover rounded-lg">
                                 </div>
+                                {{-- <div class="w-[25%]">
+                                    <div class="w-20 h-20 rounded-lg bg-gray-300"></div>
+                                </div> --}}
                                 <div class="w-[75%]">
                                     <h3 class="text-xs font-semibold text-main-text dark:text-dark-main-text">
                                         Vegetable Burger Vegetable
