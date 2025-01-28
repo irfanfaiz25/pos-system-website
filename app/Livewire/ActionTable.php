@@ -27,6 +27,11 @@ class ActionTable extends Component
         $this->dispatch('globalFilterUpdated', filter: $value);
     }
 
+    public function openAddModal()
+    {
+        $this->dispatch('openAddModal');
+    }
+
     public function render()
     {
         return view('livewire.components.action-table');

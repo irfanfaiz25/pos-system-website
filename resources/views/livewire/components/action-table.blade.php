@@ -38,7 +38,7 @@
         @endif
 
     </div>
-    <button
+    <button wire:click='openAddModal'
         class="px-3 py-2 min-w-40 max-w-48 bg-secondary-bg hover:bg-secondary-bg/90 rounded-md text-sm text-dark-main-text transition-all duration-300">
         {{ $createButtonText }}
     </button>
