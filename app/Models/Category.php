@@ -10,4 +10,10 @@ class Category extends Model
         'name',
         'image_path'
     ];
+
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

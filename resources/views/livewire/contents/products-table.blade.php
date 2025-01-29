@@ -1,5 +1,5 @@
 <div>
-    <livewire:action-table :searchPlaceholder="'Search products...'" :filterOptions="collect([['id' => 0, 'name' => 'All'], ['id' => 2, 'name' => 'foods']])" :createButtonText="'Add New Product'" :showFilter="true" />
+    <livewire:action-table :searchPlaceholder="'Search products...'" :filterOptions="$categories" :createButtonText="'Add New Product'" :showFilter="true" />
 
     <div class="relative mt-8">
         <div class="overflow-x-auto">
@@ -9,57 +9,74 @@
                         <th class="rounded-s-md px-2 py-3 text-center">No</th>
                         <th class="px-2 py-3">Image</th>
                         <th class="px-2 py-3">Name</th>
+                        <th class="px-2 py-3">Description</th>
                         <th class="px-2 py-3">Category</th>
                         <th class="px-2 py-3">Price</th>
                         <th class="rounded-e-md px-2 py-3"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="h-2"></tr>
-                    <tr class="px-3 bg-main-bg dark:bg-dark-main-bg text-sm">
-                        <td class="rounded-s-md px-2 py-3 text-center">
-                            1
-                        </td>
-                        <td class="px-2 py-3">
-                            {{-- <div class="h-14 w-20 bg-gray-300 rounded-md"></div> --}}
-                            <img src="{{ asset('storage/img/product2.jpg') }}" alt="product"
-                                class="h-14 w-20 rounded-md object-cover">
-                        </td>
-                        <td class="px-2 py-3">
-                            Vegetable Burger
-                        </td>
-                        <td class="px-2 py-3">
-                            Burger
-                        </td>
-                        <td class="px-2 py-3">
-                            IDR 19,000
-                        </td>
-                        <td class="rounded-e-md px-2 py-3">
-                            <div x-data="{ isOpen: false }">
-                                <button
-                                    class="w-6 h-6 bg-gray-100 dark:bg-dark-tertiary-bg hover:bg-gray-200 border border-gray-300 text-main-text dark:text-dark-main-text rounded-md flex justify-center items-center cursor-pointer transition-all duration-300"
-                                    @click="isOpen = !isOpen">
-                                    <i class="fa-solid text-sm transition-transform duration-300"
-                                        :class="isOpen ? 'fa-ellipsis rotate-90' : 'fa-ellipsis'"></i>
-                                </button>
-                                <ul role="menu" x-show="isOpen" @click.away="isOpen = false"
-                                    class="absolute mt-2 right-16 z-50 min-w-36 max-w-72 overflow-auto rounded-lg border border-slate-200 bg-main-bg p-1.5 shadow-lg focus:outline-none transition-all duration-500">
-                                    <li role="menuitem"
-                                        class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
-                                        <i class="fa-solid fa-pencil text-blue-500 pr-2"></i>
-                                        Edit
-                                    </li>
-                                    <li role="menuitem"
-                                        class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
-                                        <i class="fa-solid fa-trash text-rose-500 pr-2"></i>
-                                        Delete
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach ($products as $product)
+                        <tr class="h-2"></tr>
+                        <tr class="px-3 bg-main-bg dark:bg-dark-main-bg text-sm">
+                            <td class="rounded-s-md px-2 py-3 text-center">
+                                {{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}
+                            </td>
+                            <td class="px-2 py-3">
+                                @if ($product->image_path)
+                                    <img src="{{ asset($product->image_path) }}" alt="{{ $product->name }}"
+                                        class="h-14 w-20 rounded-md object-cover">
+                                @else
+                                    <div
+                                        class="h-14 w-20 bg-gray-200 rounded-md shadow-sm flex justify-center items-center">
+                                        <i class="fa-regular fa-image text-gray-400"></i>
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="px-2 py-3">
+                                {{ $product->name ?? '-' }}
+                            </td>
+                            <td class="px-2 py-3">
+                                {{ $product->description ?? '-' }}
+                            </td>
+                            <td class="px-2 py-3">
+                                {{ $product->category->name ?? '-' }}
+                            </td>
+                            <td class="px-2 py-3">
+                                @rupiah($product->price)
+                            </td>
+                            <td class="rounded-e-md px-2 py-3">
+                                <div x-data="{ isOpen: false }">
+                                    <button
+                                        class="w-6 h-6 bg-gray-100 dark:bg-dark-tertiary-bg hover:bg-gray-200 border border-gray-300 text-main-text dark:text-dark-main-text rounded-md flex justify-center items-center cursor-pointer transition-all duration-300"
+                                        @click="isOpen = !isOpen">
+                                        <i class="fa-solid text-sm transition-transform duration-300"
+                                            :class="isOpen ? 'fa-ellipsis rotate-90' : 'fa-ellipsis'"></i>
+                                    </button>
+                                    <ul role="menu" x-show="isOpen" @click.away="isOpen = false"
+                                        class="absolute mt-2 right-16 z-50 min-w-36 max-w-72 overflow-auto rounded-lg border border-slate-200 bg-main-bg p-1.5 shadow-lg focus:outline-none transition-all duration-500">
+                                        <li role="menuitem"
+                                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
+                                            <i class="fa-solid fa-pencil text-blue-500 pr-2"></i>
+                                            Edit
+                                        </li>
+                                        <li role="menuitem"
+                                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
+                                            <i class="fa-solid fa-trash text-rose-500 pr-2"></i>
+                                            Delete
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+
                 </tbody>
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $products->links('vendor.livewire.tailwind') }}
         </div>
     </div>
 
@@ -82,33 +99,92 @@
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 class="inline-block align-bottom bg-white dark:bg-dark-main-bg rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
                 <!-- Modal Header -->
-                <div class="bg-white dark:bg-dark-main-bg px-6 pt-6 pb-4">
+                <div class="bg-white dark:bg-dark-main-bg px-6 pt-6 pb-4 relative">
+                    <button type="button" wire:click='closeAddModal'
+                        class="absolute top-4 right-4 text-gray-400 hover:text-gray-500">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
                     <h3 class="text-lg font-semibold leading-6 text-gray-900 dark:text-dark-main-text">
                         Add New Product
                     </h3>
                 </div>
 
                 <!-- Modal Body -->
-                <div class="px-6 py-4">
-                    <form>
+                <form enctype="multipart/form-data" wire:submit='handleAddProduct'>
+                    <div class="px-6 py-4 font-normal text-sm">
                         <div class="mb-5">
-                            <label for="name"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product
-                                Name</label>
-                            <input type="text" id="name"
-                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500 dark:shadow-xs-light"
-                                placeholder="Burger" required />
-                        </div>
-                    </form>
-                </div>
+                            <label for="image"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Product
+                                Image</label>
+                            <div class="flex items-center space-x-4">
+                                @if ($image)
+                                    <div
+                                        class="w-52 h-24 bg-gray-100 dark:bg-dark-tertiary-bg rounded-lg flex items-center justify-center overflow-hidden">
+                                        <img src="{{ $image->temporaryUrl() }}" id="preview" alt="Preview"
+                                            class="w-full h-full object-cover">
+                                    </div>
+                                @else
+                                    <div
+                                        class="w-52 h-24 bg-gray-100 dark:bg-dark-tertiary-bg rounded-lg shadow-sm flex justify-center items-center">
+                                        <i class="fa-regular fa-image text-lg text-gray-400"></i>
+                                    </div>
+                                @endif
 
-                <div
-                    class="flex items-center justify-end space-x-2 p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button type="button" wire:click='closeAddModal'
-                        class="py-1.5 px-5 text-sm font-medium text-main-text dark:text-dark-main-text border border-gray-500 hover:bg-gray-500 hover:text-dark-main-text rounded-md">Cancel</button>
-                    <button type="button"
-                        class="text-white bg-secondary-bg hover:bg-secondary-bg/90 border border-main-border px-4 py-1.5 text-sm text-center rounded-md">Add</button>
-                </div>
+                                <input wire:model='image' type="file" id="image" accept="image/*"
+                                    class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light" />
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Product
+                                Name</label>
+                            <input wire:model='name' type="text" id="name"
+                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark dark:shadow-xs-light"
+                                placeholder="Burger" />
+                        </div>
+                        <div class="mb-2">
+                            <label for="description"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                Description
+                            </label>
+                            <textarea wire:model='description' name="description" id="description"
+                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light"
+                                rows="3"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="category"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                Category
+                            </label>
+                            <select wire:model.live.debounce.300ms='categoryId' id="category"
+                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light font-normal">
+                                <option value="" selected>--choose category--</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="price"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                Price
+                            </label>
+                            <input wire:model='price' type="text" id="price"
+                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark dark:shadow-xs-light"
+                                placeholder="10000" />
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-center justify-end space-x-2 p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button type="button" wire:click='closeAddModal'
+                            class="py-1.5 px-5 text-sm font-medium text-main-text dark:text-dark-main-text border border-gray-500 hover:bg-gray-500 hover:text-dark-main-text rounded-md">Cancel</button>
+                        <button type="submit"
+                            class="text-white bg-secondary-bg hover:bg-secondary-bg/90 border border-main-border px-4 py-1.5 text-sm text-center rounded-md">Add</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

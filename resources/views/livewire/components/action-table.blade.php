@@ -22,21 +22,26 @@
                 <button @click="isOpen = !isOpen"
                     class="px-3 py-2 w-full sm:min-w-[150px] sm:max-w-[150px] bg-secondary-bg hover:bg-secondary-bg/90 rounded-md text-sm text-dark-main-text flex justify-between space-x-1 items-center"
                     type="button">
-                    <span>{{ $selectedFilter ?: 'All' }}</span>
+                    <span>{{ $selectedFilter ? $filterOptions->firstWhere('id', $selectedFilter)['name'] : 'All' }}</span>
                     <i class="fa-solid" :class="isOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                 </button>
                 <ul role="menu" x-show="isOpen" @click.away="isOpen = false"
-                    class="absolute left-0 mt-2 z-10 w-full sm:min-w-[150px] sm:max-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-main-bg p-1.5 shadow-lg focus:outline-none">
+                    class="absolute left-0 mt-2 z-10 w-full sm:min-w-[150px] sm:max-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-main-bg p-1.5 shadow-lg focus:outline-none space-y-1">
+                    <li role="menuitem" wire:click="$set('selectedFilter', null)"
+                        class="cursor-pointer rounded-md flex w-full text-sm items-center p-3 transition-all {{ $selectedFilter == '' ? 'bg-secondary-bg text-dark-main-text' : 'text-main-text dark:text-dark-main-text hover:bg-gray-100 focus:bg-gray-100' }}"
+                        @click="isOpen = false">
+                        All
+                    </li>
                     @foreach ($filterOptions as $option)
                         <li role="menuitem" wire:click="$set('selectedFilter', {{ $option['id'] }})"
-                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
+                            class="cursor-pointer rounded-md flex w-full text-sm items-center p-3 transition-all {{ $selectedFilter === $option->id ? 'bg-secondary-bg text-dark-main-text' : 'text-main-text dark:text-dark-main-text hover:bg-gray-100 focus:bg-gray-100' }}"
+                            @click="isOpen = false">
                             {{ $option['name'] }}
                         </li>
                     @endforeach
                 </ul>
             </div>
         @endif
-
     </div>
     <button wire:click='openAddModal'
         class="px-3 py-2 min-w-40 max-w-48 bg-secondary-bg hover:bg-secondary-bg/90 rounded-md text-sm text-dark-main-text transition-all duration-300">
