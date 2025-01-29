@@ -2,7 +2,7 @@
     <div class="flex items-center space-x-2 w-full">
         <div class="w-full max-w-xs min-w-[200px]">
             <div class="relative">
-                <input wire:model.debounce.300ms='search'
+                <input wire:model.live.debounce.300ms='search'
                     class="w-full bg-main-bg dark:bg-dark-main-bg placeholder:text-slate-400 text-main-text text-sm border border-gray-200 dark:border-[#393939] rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-main-border/80 dark:focus:border-main-border/80 hover:border-gray-300 shadow-sm focus:shadow"
                     placeholder="{{ $searchPlaceholder }}" />
                 <button

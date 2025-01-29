@@ -12,16 +12,34 @@ class ProductsTable extends Component
 {
     use WithPagination, WithFileUploads;
 
+    public $searchTerm = '';
+    public $filter = '';
+
     public $filters = '';
     public $showAddModal = false;
-    protected $listeners = ['openAddModal' => 'handleOpenAddModal'];
-
     public $image;
     public $name = '';
     public $description = '';
     public $categoryId = '';
     public $price = '';
 
+    protected $listeners = [
+        'globalSearchUpdated' => 'updateSearch',
+        'globalFilterUpdated' => 'updateFilter',
+        'openAddModal' => 'handleOpenAddModal'
+    ];
+
+
+    public function updateSearch($search)
+    {
+        $this->resetPage();
+        $this->searchTerm = $search;
+    }
+
+    public function updateFilter($filter)
+    {
+        $this->filter = $filter;
+    }
 
     public function handleOpenAddModal()
     {
@@ -62,8 +80,15 @@ class ProductsTable extends Component
 
     public function render()
     {
-        $products = Product::latest()->paginate(5);
+        $products = Product::query()
+            ->when($this->filter, function ($query) {
+                $query->where('category_id', $this->filter); // Filter by category
+            })
+            ->when($this->searchTerm, function ($query) {
+                $query->where('name', 'like', '%' . $this->searchTerm . '%'); // Search by name
+            })->latest()->paginate(5);
         $categories = Category::all();
+
         return view('livewire.contents.products-table', [
             'products' => $products,
             'categories' => $categories
