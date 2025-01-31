@@ -17,8 +17,11 @@ class ProductsTable extends Component
 
     public $filters = '';
     public $showModal = false;
+    public $isEditMode = false;
+    public $productId = null;
 
-    public $image;
+    public $newImage = null;
+    public $existingImagePath = null;
     public $name = '';
     public $description = '';
     public $categoryId = '';
@@ -49,35 +52,71 @@ class ProductsTable extends Component
 
     public function closeModal()
     {
+        $this->isEditMode = false;
+        $this->productId = null;
+        $this->reset(['name', 'description', 'categoryId', 'price', 'newImage', 'existingImagePath']);
+
         $this->showModal = false;
     }
 
-    public function handleAddProduct()
+    public function testToast()
+    {
+        toastr()->success('test');
+    }
+
+    public function editProduct($productId)
+    {
+        $this->isEditMode = true;
+        $this->productId = $productId;
+
+        $product = Product::find($productId);
+
+        $this->name = $product->name;
+        $this->description = $product->description;
+        $this->price = (int) $product->price;
+        $this->categoryId = $product->category_id;
+        $this->existingImagePath = $product->image_path;
+
+        $this->handleOpenModal();
+    }
+
+    public function handleSaveProduct()
     {
         $validated = $this->validate([
-            'name' => 'required|max:100|string|unique:products,name',
+            'name' => 'required|max:100|string|unique:products,name,' . $this->productId,
             'description' => 'nullable|string|max:255',
             'categoryId' => 'required|exists:categories,id',
             'price' => 'required',
-            'image' => 'nullable|mimes:jpg,jpeg,png|max:2048'
+            'newImage' => 'nullable|mimes:jpg,jpeg,png|max:2048'
         ], [
             'categoryId.required' => 'category field is required',
-            'image.mimes' => 'The image must be a file of type: jpg, jpeg, png.',
-            'image.max' => 'The image may not be greater than 2MB.',
+            'newImage.mimes' => 'The image must be a file of type: jpg, jpeg, png.',
+            'newImage.max' => 'The image may not be greater than 2MB.',
         ]);
 
-        $imagePath = null;
-        if ($this->image) {
-            $imagePath = $this->image->store('img', 'public');
+        $imagePath = $this->existingImagePath;
+        if ($this->newImage) {
+            $imagePath = 'storage/' . $this->newImage->store('img', 'public');
         }
 
-        Product::create([
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'category_id' => $validated['categoryId'],
-            'price' => $validated['price'],
-            'image_path' => $imagePath ? 'storage/' . $imagePath : null,
-        ]);
+        if ($this->isEditMode) {
+            $product = Product::find($this->productId);
+            $product->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['categoryId'],
+                'price' => $validated['price'],
+                'image_path' => $imagePath ?? null,
+            ]);
+        } else {
+            Product::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['categoryId'],
+                'price' => $validated['price'],
+                'image_path' => $imagePath ?? null,
+            ]);
+        }
 
         $this->closeModal();
     }
