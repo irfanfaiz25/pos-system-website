@@ -3,7 +3,7 @@
         <div class="w-full max-w-xs min-w-[200px]">
             <div class="relative">
                 <input wire:model.live.debounce.300ms='search'
-                    class="w-full bg-main-bg dark:bg-dark-main-bg placeholder:text-slate-400 text-main-text text-sm border border-gray-200 dark:border-[#393939] rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-main-border/80 dark:focus:border-main-border/80 hover:border-gray-300 shadow-sm focus:shadow"
+                    class="w-full bg-main-bg dark:bg-dark-main-bg placeholder:text-slate-400 text-main-text dark:text-dark-main-text text-sm border border-gray-200 dark:border-[#393939] rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-main-border/80 dark:focus:border-main-border/80 hover:border-gray-300 shadow-sm focus:shadow"
                     placeholder="{{ $searchPlaceholder }}" />
                 <button
                     class="absolute top-1 right-1 flex items-center space-x-1 rounded bg-secondary-bg/80 py-1 px-2.5 border border-transparent text-center text-sm text-dark-main-text transition-all shadow-smdisabled:pointer-events-none font-normal"
@@ -26,15 +26,15 @@
                     <i class="fa-solid" :class="isOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                 </button>
                 <ul role="menu" x-show="isOpen" @click.away="isOpen = false"
-                    class="absolute left-0 mt-2 z-10 w-full sm:min-w-[150px] sm:max-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-main-bg p-1.5 shadow-lg focus:outline-none space-y-1">
+                    class="absolute left-0 mt-2 z-10 w-full sm:min-w-[150px] sm:max-w-[150px] overflow-auto rounded-lg border border-slate-200 dark:border-slate-700 bg-main-bg dark:bg-dark-tertiary-bg p-1.5 shadow-lg focus:outline-none space-y-1">
                     <li role="menuitem" wire:click="$set('selectedFilter', null)"
-                        class="cursor-pointer rounded-md flex w-full text-sm items-center p-3 transition-all {{ $selectedFilter == '' ? 'bg-secondary-bg text-dark-main-text' : 'text-main-text dark:text-dark-main-text hover:bg-gray-100 focus:bg-gray-100' }}"
+                        class="cursor-pointer rounded-md flex w-full text-sm items-center p-3 transition-all {{ $selectedFilter == '' ? 'bg-secondary-bg text-dark-main-text' : 'text-main-text dark:text-dark-main-text hover:bg-gray-100 hover:dark:bg-dark-main-bg' }}"
                         @click="isOpen = false">
                         All
                     </li>
                     @foreach ($filterOptions as $option)
                         <li role="menuitem" wire:click="$set('selectedFilter', {{ $option['id'] }})"
-                            class="cursor-pointer rounded-md flex w-full text-sm items-center p-3 transition-all {{ $selectedFilter === $option->id ? 'bg-secondary-bg text-dark-main-text' : 'text-main-text dark:text-dark-main-text hover:bg-gray-100 focus:bg-gray-100' }}"
+                            class="cursor-pointer rounded-md flex w-full text-sm items-center p-3 transition-all {{ $selectedFilter === $option->id ? 'bg-secondary-bg text-dark-main-text' : 'text-main-text dark:text-dark-main-text hover:bg-gray-100 hover:dark:bg-dark-main-bg' }}"
                             @click="isOpen = false">
                             {{ $option['name'] }}
                         </li>

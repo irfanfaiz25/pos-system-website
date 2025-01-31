@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-3">
                 @for ($i = 0; $i < 6; $i++)
                     <div class="p-3 bg-main-bg dark:bg-dark-main-bg dark:border-2 border-[#393939] rounded-lg shadow-lg">
                         <img src="{{ asset('storage/img/product2.jpg') }}" alt="product"

@@ -16,7 +16,8 @@ class ProductsTable extends Component
     public $filter = '';
 
     public $filters = '';
-    public $showAddModal = false;
+    public $showModal = false;
+
     public $image;
     public $name = '';
     public $description = '';
@@ -26,7 +27,7 @@ class ProductsTable extends Component
     protected $listeners = [
         'globalSearchUpdated' => 'updateSearch',
         'globalFilterUpdated' => 'updateFilter',
-        'openAddModal' => 'handleOpenAddModal'
+        'openAddModal' => 'handleOpenModal'
     ];
 
 
@@ -41,14 +42,14 @@ class ProductsTable extends Component
         $this->filter = $filter;
     }
 
-    public function handleOpenAddModal()
+    public function handleOpenModal()
     {
-        $this->showAddModal = true;
+        $this->showModal = true;
     }
 
-    public function closeAddModal()
+    public function closeModal()
     {
-        $this->showAddModal = false;
+        $this->showModal = false;
     }
 
     public function handleAddProduct()
@@ -58,13 +59,16 @@ class ProductsTable extends Component
             'description' => 'nullable|string|max:255',
             'categoryId' => 'required|exists:categories,id',
             'price' => 'required',
-            'image' => 'nullable|mimes:jpg,jpeg,png'
+            'image' => 'nullable|mimes:jpg,jpeg,png|max:2048'
+        ], [
+            'categoryId.required' => 'category field is required',
+            'image.mimes' => 'The image must be a file of type: jpg, jpeg, png.',
+            'image.max' => 'The image may not be greater than 2MB.',
         ]);
 
+        $imagePath = null;
         if ($this->image) {
-            $extension = $this->image->getClientOriginalExtension();
-            $newImageName = time() . '_' . uniqid() . '.' . $extension;
-            $imagePath = $this->image->storeAs('img', $newImageName, 'public');
+            $imagePath = $this->image->store('img', 'public');
         }
 
         Product::create([
@@ -75,7 +79,7 @@ class ProductsTable extends Component
             'image_path' => $imagePath ? 'storage/' . $imagePath : null,
         ]);
 
-        $this->closeAddModal();
+        $this->closeModal();
     }
 
     public function render()

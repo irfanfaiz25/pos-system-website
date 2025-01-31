@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         Blade::directive('rupiah', function ($expression) {
-            return "<?php echo number_format($expression, 0, ',', '.'); ?>";
+            return "<?php echo 'Rp. ' . number_format($expression, 0, ',', '.'); ?>";
         });
     }
 

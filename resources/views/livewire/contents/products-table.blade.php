@@ -15,7 +15,7 @@
                         <th class="rounded-e-md px-2 py-3"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="font-medium">
                     @foreach ($products as $product)
                         <tr class="h-2"></tr>
                         <tr class="px-3 bg-main-bg dark:bg-dark-main-bg text-sm">
@@ -54,14 +54,14 @@
                                             :class="isOpen ? 'fa-ellipsis rotate-90' : 'fa-ellipsis'"></i>
                                     </button>
                                     <ul role="menu" x-show="isOpen" @click.away="isOpen = false"
-                                        class="absolute mt-2 right-16 z-50 min-w-36 max-w-72 overflow-auto rounded-lg border border-slate-200 bg-main-bg p-1.5 shadow-lg focus:outline-none transition-all duration-500">
+                                        class="absolute mt-2 right-16 z-50 min-w-36 max-w-72 overflow-auto rounded-lg border border-slate-200 dark:border-slate-800 bg-main-bg dark:bg-dark-tertiary-bg p-1.5 shadow-lg focus:outline-none transition-all duration-500">
                                         <li role="menuitem"
-                                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
+                                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 dark:hover:bg-dark-main-bg">
                                             <i class="fa-solid fa-pencil text-blue-500 pr-2"></i>
                                             Edit
                                         </li>
                                         <li role="menuitem"
-                                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 focus:bg-gray-100">
+                                            class="cursor-pointer rounded-md text-main-text dark:text-dark-main-text flex w-full text-sm items-center p-3 transition-all hover:bg-gray-100 dark:hover:bg-dark-main-bg">
                                             <i class="fa-solid fa-trash text-rose-500 pr-2"></i>
                                             Delete
                                         </li>
@@ -81,7 +81,7 @@
     </div>
 
     {{-- add modal --}}
-    <div x-show="$wire.showAddModal" x-transition:enter="transition ease-out duration-300"
+    <div x-show="$wire.showModal" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
@@ -91,7 +91,7 @@
         <!-- Modal Container -->
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <!-- Modal Content -->
-            <div x-show="$wire.showAddModal" x-transition:enter="transition ease-out duration-300"
+            <div x-show="$wire.showModal" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave="transition ease-in duration-200"
@@ -110,12 +110,12 @@
                 </div>
 
                 <!-- Modal Body -->
-                <form enctype="multipart/form-data" wire:submit='handleAddProduct'>
+                <form enctype="multipart/form-data" wire:submit.prevent='handleAddProduct'>
                     <div class="px-6 py-4 font-normal text-sm">
                         <div class="mb-5">
-                            <label for="image"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Product
-                                Image</label>
+                            <label for="image" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                Product Image
+                            </label>
                             <div class="flex items-center space-x-4">
                                 @if ($image)
                                     <div
@@ -130,18 +130,73 @@
                                     </div>
                                 @endif
 
-                                <input wire:model='image' type="file" id="image" accept="image/*"
-                                    class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light" />
+                                <div class="w-full">
+                                    <input wire:model='image' type="file" id="image" accept="image/*"
+                                        class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light" />
+                                    @error('image')
+                                        <p class="text-red-500 text-xs mt-1">
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
                         <div class="mb-2">
-                            <label for="name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Product
-                                Name</label>
+                            <label for="name" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                Product Name
+                                <span class="text-xs text-red-500">
+                                    *
+                                </span>
+                            </label>
                             <input wire:model='name' type="text" id="name"
                                 class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark dark:shadow-xs-light"
                                 placeholder="Burger" />
+                            @error('name')
+                                <p class="text-red-500 text-xs mt-1">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <div class="mb-2 flex space-x-2 w-full">
+                            <div class="w-full">
+                                <label for="category"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    Category
+                                    <span class="text-xs text-red-500">
+                                        *
+                                    </span>
+                                </label>
+                                <select wire:model.live.debounce.300ms='categoryId' id="category"
+                                    class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light font-normal">
+                                    <option value="" selected>--choose category--</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('categoryId')
+                                    <p class="text-red-500 text-xs mt-1">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="w-full">
+                                <label for="price"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    Price
+                                    <span class="text-xs text-red-500">
+                                        *
+                                    </span>
+                                </label>
+                                <input wire:model='price' type="text" id="price"
+                                    class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark dark:shadow-xs-light"
+                                    placeholder="10000" />
+                                @error('price')
+                                    <p class="text-red-500 text-xs mt-1">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
                         </div>
                         <div class="mb-2">
                             <label for="description"
@@ -151,28 +206,11 @@
                             <textarea wire:model='description' name="description" id="description"
                                 class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light"
                                 rows="3"></textarea>
-                        </div>
-                        <div class="mb-2">
-                            <label for="category"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-                                Category
-                            </label>
-                            <select wire:model.live.debounce.300ms='categoryId' id="category"
-                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:shadow-xs-light font-normal">
-                                <option value="" selected>--choose category--</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-2">
-                            <label for="price"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-                                Price
-                            </label>
-                            <input wire:model='price' type="text" id="price"
-                                class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-dark-main-bg dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark dark:shadow-xs-light"
-                                placeholder="10000" />
+                            @error('description')
+                                <p class="text-red-500 text-xs mt-1">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </div>
                     </div>
 
